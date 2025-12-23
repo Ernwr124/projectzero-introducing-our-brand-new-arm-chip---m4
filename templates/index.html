@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M4 | The Next Generation of Silicon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chip-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+        }
+        .glow-purple {
+            box-shadow: 0 0 80px -10px rgba(168, 85, 247, 0.6);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #fff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Power-Up Animations */
+        @keyframes chip-entrance {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; filter: brightness(5) blur(20px); }
+            70% { transform: scale(1.1) rotate(5deg); opacity: 1; filter: brightness(2) blur(0px); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1) blur(0px); }
+        }
+
+        @keyframes vortex-spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes pulse-energy {
+            0%, 100% { opacity: 0.3; stroke-width: 1; }
+            50% { opacity: 0.8; stroke-width: 2; }
+        }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .animate-chip-in {
+            animation: chip-entrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .vortex-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .vortex-svg {
+            width: 100%;
+            height: 100%;
+            animation: vortex-spin 20s linear infinite;
+        }
+
+        .vortex-path {
+            fill: none;
+            stroke: #a855f7;
+            stroke-dasharray: 100 200;
+            opacity: 0.4;
+            animation: pulse-energy 4s ease-in-out infinite;
+        }
+
+        .flash-effect {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 200;
+            pointer-events: none;
+            opacity: 0;
+            animation: flash 1.2s ease-out 0.4s forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Die Visualization Styles */
+        .die-container {
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .die-grid-texture {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 12px 12px;
+        }
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, rgba(168, 85, 247, 0.05), transparent);
+            animation: scan 6s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(500%); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-black">
+
+    <div class="flash-effect"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] glass">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-extrabold tracking-tighter flex items-center gap-2">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.11.8 1.12-.16 2.13-.83 3.59-.73 1.83.13 3.18.91 3.95 2.1-3.6 2.14-3.03 6.63.59 8.1-.71 1.82-1.63 3.65-3.24 2.7zm-4.71-13.9c-.06-2.5 2.11-4.57 4.54-4.38.25 2.76-2.48 4.91-4.54 4.38z"/></svg>
+                M4
+            </div>
+            <div class="hidden md:flex space-x-10 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <a href="#intro" class="hover:text-white transition">Introduction</a>
+                <a href="#architecture" class="hover:text-white transition">Architecture</a>
+                <a href="#performance" class="hover:text-white transition">Performance</a>
+                <a href="#efficiency" class="hover:text-white transition">Efficiency</a>
+            </div>
+            <button class="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all active:scale-95">
+                Pre-order
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
+        <!-- Vortex Animation Behind Chip -->
+        <div class="vortex-container">
+            <svg class="vortex-svg" viewBox="0 0 200 200">
+                <defs>
+                    <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:rgb(168,85,247);stop-opacity:0" />
+                        <stop offset="100%" style="stop-color:rgb(168,85,247);stop-opacity:0.2" />
+                    </radialGradient>
+                </defs>
+                <!-- Spiral paths based on user sketch -->
+                <path class="vortex-path" d="M100,100 Q120,40 180,40" />
+                <path class="vortex-path" d="M100,100 Q160,120 160,180" />
+                <path class="vortex-path" d="M100,100 Q80,160 20,160" />
+                <path class="vortex-path" d="M100,100 Q40,80 40,20" />
+                <path class="vortex-path" style="animation-delay: -1s" d="M100,100 Q140,60 190,80" />
+                <path class="vortex-path" style="animation-delay: -2s" d="M100,100 Q60,140 10,120" />
+                <path class="vortex-path" style="animation-delay: -1.5s" d="M100,100 Q140,140 120,190" />
+                <path class="vortex-path" style="animation-delay: -0.5s" d="M100,100 Q60,60 80,10" />
+            </svg>
+        </div>
+
+        <div class="relative z-10 text-center mb-16">
+            <h1 class="text-7xl md:text-9xl font-black tracking-tighter mb-4 reveal active">
+                Outrageously <br><span class="text-gradient">Powerful.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 font-light reveal active delay-200">The next generation of Apple Silicon is here.</p>
+        </div>
+
+        <!-- The Chip Core -->
+        <div class="relative group z-10">
+            <div class="absolute inset-0 bg-purple-500 blur-[120px] opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+            
+            <div class="animate-chip-in">
+                <div class="relative w-64 h-64 md:w-96 md:h-96 chip-gradient rounded-[40px] p-1 glow-purple shadow-2xl">
+                    <div class="w-full h-full bg-black rounded-[38px] flex flex-col items-center justify-center overflow-hidden relative">
+                        <!-- Silicon Texture -->
+                        <div class="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 die-grid-texture opacity-20"></div>
+                        
+                        <!-- M4 Branding -->
+                        <span class="text-8xl md:text-9xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-gray-600 drop-shadow-2xl">M4</span>
+                        <div class="mt-4 text-[10px] md:text-xs tracking-[0.6em] text-gray-400 font-bold uppercase">Ultra-Silicon</div>
+                        
+                        <!-- Internal Glow -->
+                        <div class="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-purple-500/20 to-transparent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7m14-8l-7 7-7-7"></path></svg>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="intro" class="max-w-4xl mx-auto px-6 py-32 text-center">
+        <h3 class="text-purple-500 font-bold tracking-widest uppercase text-sm mb-6 reveal">The Breakthrough</h3>
+        <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-8 reveal">
+            A giant leap for <br>
+            <span class="text-gradient">pro performance.</span>
+        </h2>
+        <p class="text-xl md:text-2xl text-gray-400 leading-relaxed reveal">
+            M4 is built on second-generation 3-nanometer technology. It features an all-new CPU with next-generation ML accelerators, a powerful GPU that brings hardware-accelerated ray tracing to more devices, and the fastest Neural Engine ever.
+        </p>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="max-w-7xl mx-auto px-6 py-32 border-t border-white/5">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            
+            <!-- Die Visualization -->
+            <div class="relative aspect-square die-container rounded-[2rem] p-6 border-white/10 shadow-2xl reveal">
+                <div class="absolute inset-0 die-grid-texture opacity-40"></div>
+                <div class="absolute inset-0 scan-line"></div>
+                
+                <div class="grid grid-cols-2 grid-rows-2 gap-4 h-full relative z-10">
+                    <div class="relative border border-blue-500/30 bg-blue-950/20 rounded-2xl p-6 flex flex-col justify-end group cursor-crosshair hover:bg-blue-900/30 transition-all">
+                        <div class="text-[10px] font-bold text-blue-400 tracking-widest mb-1 uppercase">Compute Engine</div>
+                        <div class="text-2xl font-black">10-CORE CPU</div>
+                    </div>
+
+                    <div class="relative border border-purple-500/30 bg-purple-950/20 rounded-2xl p-6 flex flex-col justify-end group cursor-crosshair hover:bg-purple-900/30 transition-all">
+                        <div class="text-[10px] font-bold text-purple-400 tracking-widest mb-1 uppercase">Graphics Engine</div>
+                        <div class="text-2xl font-black">10-CORE GPU</div>
+                    </div>
+
+                    <div class="relative border border-emerald-500/30 bg-emerald-950/20 rounded-2xl p-6 flex flex-col justify-end group cursor-crosshair hover:bg-emerald-900/30 transition-all">
+                        <div class="text-[10px] font-bold text-emerald-400 tracking-widest mb-1 uppercase">Neural Engine</div>
+                        <div class="text-2xl font-black">38 TFLOPS</div>
+                    </div>
+
+                    <div class="relative border border-orange-500/30 bg-orange-950/20 rounded-2xl p-6 flex flex-col justify-end group cursor-crosshair hover:bg-orange-900/30 transition-all">
+                        <div class="text-[10px] font-bold text-orange-400 tracking-widest mb-1 uppercase">Media Engine</div>
+                        <div class="text-2xl font-black">8K PRORES</div>
+                    </div>
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                    <div class="bg-black/80 border border-white/20 px-8 py-4 rounded-2xl backdrop-blur-2xl shadow-2xl">
+                        <span class="text-3xl font-black tracking-tighter">M4 SILICON</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-12">
+                <div class="reveal">
+                    <h2 class="text-5xl font-extrabold mb-6">Built for the <br>AI Era.</h2>
+                    <p class="text-gray-400 text-lg leading-relaxed">The Neural Engine in M4 is an absolute beast. Capable of 38 trillion operations per second, it’s faster than the AI processing unit in any AI PC today.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 reveal delay-200">
+                    <div class="border-l-2 border-purple-500 pl-6">
+                        <div class="text-4xl font-black mb-1">28B</div>
+                        <div class="text-sm text-gray-500 uppercase tracking-widest">Transistors</div>
+                    </div>
+                    <div class="border-l-2 border-blue-500 pl-6">
+                        <div class="text-4xl font-black mb-1">3nm</div>
+                        <div class="text-sm text-gray-500 uppercase tracking-widest">Process</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Benchmarks -->
+    <section id="performance" class="bg-white/5 py-32">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-5xl font-bold mb-4">Unrivaled Performance.</h2>
+                <p class="text-gray-400">Industry-leading performance per watt.</p>
+            </div>
+
+            <div class="space-y-12">
+                <div class="reveal">
+                    <div class="flex justify-between items-end mb-4">
+                        <span class="text-2xl font-black">M4</span>
+                        <span class="text-xl font-bold text-purple-400">1.5x</span>
+                    </div>
+                    <div class="w-full bg-white/10 h-12 rounded-2xl overflow-hidden border border-white/10">
+                        <div class="h-full chip-gradient w-full shadow-[0_0_30px_rgba(168,85,247,0.5)]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 border-t border-white/10 text-center text-gray-600 text-xs tracking-widest uppercase">
+        <p>© 2024 Apple Silicon. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Reveal animation on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
